@@ -15,15 +15,16 @@ function main() {
   // http://<host>:<port>/api/state?apikey=EA46CD0BE91443688281453930FB027D
   
   request( { url:'http://' + HOST + ':' + PORT + '/api/state?apikey=' + API_KEY, json:true }, function(err, res, data) {
-    if( err ) { console.log('error1', err); finish(); return }
+    if( err ) { console.log('error1', err); finish(); return; }
 
-    var state = data.state.flags.printing ? data.job.filename : 'Idle';
+    var state = data.state.flags.printing ? data.job.filename.replace(/\.gcode/,'') : 'Idle';
+    var filament = data.job.filament.split(' / ')[0];
 
     lcd.clearScreen();
     lcd.write(center(state,20));
     lcd.write(center(( Math.round( data.progress.progress * 1000 ) / 10 ) + '%  ' + data.progress.printTimeLeft,20));
-    lcd.write(center(data.progress.printTime + ' ' + data.temperatures.extruder + '°',20));
-    lcd.write(data.job.filament + ' z' + rpad(parseFloat(data.currentZ),6));
+    lcd.write(center(data.progress.printTime + ' ' + data.temperatures.extruder.current + '°',20));
+    lcd.write(filament + ' z' + rpad(parseFloat(data.currentZ),6));
 
     finish();
   });
