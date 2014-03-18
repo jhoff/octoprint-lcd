@@ -24,14 +24,14 @@ function main() {
         data.job.filename.replace(/\.gcode/,''),
         ( Math.round( data.progress.progress * 1000 ) / 10 ) + '%  ' + data.progress.printTimeLeft,
         data.progress.printTime + ' ' + data.temperatures.extruder.current + 'C',
-        data.job.filament.split(' / ')[0] + ' z' + rpad(parseFloat(data.currentZ),6)
+        data.job.filament.split(' / ')[0] + ' z' + parseFloat(data.currentZ)
       ];
     } else {
       lines = [
         'Printrbot Simple',
         'Idle',
         '',
-        data.temperatures.extruder.current + 'C   z' + rpad(parseFloat(data.currentZ),6)
+        data.temperatures.extruder.current + 'C   z' + parseFloat(data.currentZ)
       ];
     }
 
