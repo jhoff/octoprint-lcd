@@ -17,14 +17,29 @@ function main() {
   request( { url:'http://' + HOST + ':' + PORT + '/api/state?apikey=' + API_KEY, json:true }, function(err, res, data) {
     if( err ) { console.log('error1', err); finish(); return; }
 
-    var state = data.state.flags.printing ? data.job.filename.replace(/\.gcode/,'') : 'Idle';
-    var filament = data.job.filament.split(' / ')[0];
+    var lines;
+
+    if( data.state.flags.printing ) {
+      lines = [
+        data.job.filename.replace(/\.gcode/,''),
+        ( Math.round( data.progress.progress * 1000 ) / 10 ) + '%  ' + data.progress.printTimeLeft,
+        data.progress.printTime + ' ' + data.temperatures.extruder.current + 'C',
+        data.job.filament.split(' / ')[0] + ' z' + rpad(parseFloat(data.currentZ),6)
+      ];
+    } else {
+      lines = [
+        'Printrbot Simple',
+        'Idle',
+        'Extruder: ' + data.temperatures.extruder.current + 'C',
+        'z' + rpad(parseFloat(data.currentZ),6)
+      ];
+    }
 
     lcd.clearScreen();
-    lcd.write(center(state,20));
-    lcd.write(center(( Math.round( data.progress.progress * 1000 ) / 10 ) + '%  ' + data.progress.printTimeLeft,20));
-    lcd.write(center(data.progress.printTime + ' ' + data.temperatures.extruder.current + '°',20));
-    lcd.write(filament + ' z' + rpad(parseFloat(data.currentZ),6));
+    lcd.write(center(line[0],20));
+    lcd.write(center(line[1],20));
+    lcd.write(center(line[2],20));
+    lcd.write(center(line[3],20));
 
     finish();
   });
