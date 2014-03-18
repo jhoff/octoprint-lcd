@@ -30,8 +30,8 @@ function main() {
       lines = [
         'Printrbot Simple',
         'Idle',
-        'Extruder: ' + data.temperatures.extruder.current + 'C',
-        'z' + rpad(parseFloat(data.currentZ),6)
+        '',
+        data.temperatures.extruder.current + 'C   z' + rpad(parseFloat(data.currentZ),6)
       ];
     }
 
