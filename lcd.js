@@ -23,7 +23,7 @@ function main() {
     lcd.write(center(state,20));
     lcd.write(center(( Math.round( data.progress.progress * 1000 ) / 10 ) + '%  ' + data.progress.printTimeLeft,20));
     lcd.write(center(data.progress.printTime + ' ' + data.temperatures.extruder + '°',20));
-    lcd.write(data.job.filament + ' z' + rpad(data.currentZ,5));
+    lcd.write(data.job.filament + ' z' + rpad(parseFloat(data.currentZ),6));
 
     finish();
   });
