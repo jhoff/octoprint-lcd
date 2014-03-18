@@ -19,6 +19,6 @@
   "main": "lcd.js",
   "dependencies": {
     "request": "2.x.x",
-    "serlcd": "git://github.com/jhoff/serlcd.git#master"
+    "serlcd": "https://github.com/jhoff/serlcd.git#master"
   }
 }
