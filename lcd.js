@@ -14,52 +14,14 @@ function main() {
   // request the current printer status
   // http://<host>:<port>/api/state?apikey=EA46CD0BE91443688281453930FB027D
   
-  request( { url:'http://' + HOST + ':' + PORT + '/api/state?apikey=' + API_KEY, json:true }, function(err, res, job) {
+  request( { url:'http://' + HOST + ':' + PORT + '/api/state?apikey=' + API_KEY, json:true }, function(err, res, data) {
     if( err ) { console.log('error1', err); finish(); return }
 
-    console.log( job );
-    console.log( printer );
-    return;
-
-    var currentJob = 'Idle';
-    var percent = false;
-    for( var x in job.data ) {
-      if( job.data[x].state === 'running' ) {
-        currentJob = job.data[x].name;
-        percent = job.data[x].done;
-      }
-    }
-    
-    if( !is_printing && percent !== false ) { // transition from idle to print
-      is_printing = true;
-      print_start = ( Date.now() / 1000 ) + 20; // give a 20 second pad for warmup ( otherwise the remaining time goes apeshit )
-    }
-    if( is_printing && percent === false ) { // transition from print to idle
-      is_printing = false;
-      print_start = 0;
-    }
-    
-    if( printer.data ) {
-      var x = Math.round(printer.data.state.x * 100) / 100;
-      var y = Math.round(printer.data.state.y * 100) / 100;
-      var z = Math.round(printer.data.state.z * 100) / 100;
-
-      var fan_status = printer.data.state.fanOn ? 'on' : 'off';
-      var extruder_temp = Math.round(printer.data.state.extruder[0].tempRead * 10)/10;
-    } else {
-      var x = 0, y = 0, z = 0, fan_status = 'on', extruder_temp = 0;
-    }
-
-    var elapsed_time = ( ( Date.now() / 1000 ) - print_start );
-    var remaining_time = ( elapsed_time / percent ) * ( 100 - percent );
-
-    if( elapsed_time < 0 ) remaining_time = 0;
-
     lcd.clearScreen();
-    lcd.write(center(currentJob,20));
-    lcd.write(center(( !is_printing ? '' : ( Math.round( percent * 100 ) / 100 ) + '%  ' + remaining_time.toHHMMSS() ),20));
-    lcd.write(center('fan:' + fan_status + '   temp:' + extruder_temp,20));
-    lcd.write('x' + rpad(x,5) + ' y' + rpad(y,5) + ' z' + rpad(z,5));
+    lcd.write(center(data.job.filename,20));
+    lcd.write(center(( Math.round( data.progress.progress * 1000 ) / 10 ) + '%  ' + data.progress.printTimeLeft ),20));
+    lcd.write(center(data.progress.printTime + ' ' + data.temperatures.extruder + '°',20));
+    lcd.write(data.job.filament + ' z' + rpad(data.currentZ,5));
 
     finish();
   });
@@ -76,19 +38,6 @@ function center(str,len) {
   str = str.substr(0,len);
   var _str = Array( Math.floor( ( len - str.length ) / 2 ) + 1 ).join(' ') + str;
   return _str + Array( len - _str.length + 1 ).join(' ');
-}
-
-Number.prototype.toHHMMSS = function () {
-    var sec_num = parseInt(this, 10); // don't forget the second param
-    var hours   = Math.floor(sec_num / 3600);
-    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-    var seconds = sec_num - (hours * 3600) - (minutes * 60);
-
-    if (hours   < 10) {hours   = "0"+hours;}
-    if (minutes < 10) {minutes = "0"+minutes;}
-    if (seconds < 10) {seconds = "0"+seconds;}
-    var time    = hours+':'+minutes+':'+seconds;
-    return time;
 }
 
 function finish() {
