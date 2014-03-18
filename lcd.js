@@ -36,10 +36,10 @@ function main() {
     }
 
     lcd.clearScreen();
-    lcd.write(center(line[0],20));
-    lcd.write(center(line[1],20));
-    lcd.write(center(line[2],20));
-    lcd.write(center(line[3],20));
+    lcd.write(center(lines[0],20));
+    lcd.write(center(lines[1],20));
+    lcd.write(center(lines[2],20));
+    lcd.write(center(lines[3],20));
 
     finish();
   });
