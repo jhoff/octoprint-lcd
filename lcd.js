@@ -17,8 +17,10 @@ function main() {
   request( { url:'http://' + HOST + ':' + PORT + '/api/state?apikey=' + API_KEY, json:true }, function(err, res, data) {
     if( err ) { console.log('error1', err); finish(); return }
 
+    var state = data.state.flags.printing ? data.job.filename : 'Idle';
+
     lcd.clearScreen();
-    lcd.write(center(data.job.filename,20));
+    lcd.write(center(state,20));
     lcd.write(center(( Math.round( data.progress.progress * 1000 ) / 10 ) + '%  ' + data.progress.printTimeLeft ),20));
     lcd.write(center(data.progress.printTime + ' ' + data.temperatures.extruder + '°',20));
     lcd.write(data.job.filament + ' z' + rpad(data.currentZ,5));
