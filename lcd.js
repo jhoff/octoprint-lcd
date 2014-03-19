@@ -22,11 +22,12 @@ function main() {
       var lines;
 
       if( data.state.flags.printing ) {
+        var filament = data.job.filament ? data.job.filament.split(' / ')[0] : '---';
         lines = [
           data.job.filename.replace(/\.gcode/,''),
           ( Math.round( data.progress.progress * 1000 ) / 10 ) + '%  ' + data.progress.printTimeLeft,
           data.progress.printTime + ' ' + data.temperatures.extruder.current + 'C',
-          data.job.filament.split(' / ')[0] + ' z' + parseFloat(data.currentZ)
+          filament + ' z' + parseFloat(data.currentZ)
         ];
       } else {
         lines = [
