@@ -43,7 +43,9 @@ function main() {
       lcd.write(center(lines[2],20));
       lcd.write(center(lines[3],20));
 
-    } catch( e ) {}
+    } catch( e ) {
+      console.log( 'exception!', e );
+    }
 
     finish();
   });
