@@ -17,9 +17,10 @@ function main() {
   request( { url:'http://' + HOST + ':' + PORT + '/api/state?apikey=' + API_KEY, json:true }, function(err, res, data) {
     if( err ) { console.log('error1', err); finish(); return; }
 
-    var lines;
-
     try {
+
+      var lines;
+
       if( data.state.flags.printing ) {
         lines = [
           data.job.filename.replace(/\.gcode/,''),
@@ -35,13 +36,14 @@ function main() {
           data.temperatures.extruder.current + 'C   z' + parseFloat(data.currentZ)
         ];
       }
-    } catch( e ) {}
 
-    lcd.clearScreen();
-    lcd.write(center(lines[0],20));
-    lcd.write(center(lines[1],20));
-    lcd.write(center(lines[2],20));
-    lcd.write(center(lines[3],20));
+      lcd.clearScreen();
+      lcd.write(center(lines[0],20));
+      lcd.write(center(lines[1],20));
+      lcd.write(center(lines[2],20));
+      lcd.write(center(lines[3],20));
+
+    } catch( e ) {}
 
     finish();
   });
