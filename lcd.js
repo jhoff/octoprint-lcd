@@ -34,7 +34,7 @@ function main() {
         var filament = data.job.filament && data.job.filament.tool0.length ? data.job.filament.tool0.length : '---';
         lines = [
           data.job.file.name.replace(/\.gcode/,''),
-          ( Math.round( data.progress.completion * 10 ) / 10 ) + '%  ' + data.progress.printTimeLeft,
+          ( Math.round( data.progress.completion * 10 ) / 10 ) + '%  ' + getTime(data.progress.printTimeLeft),
           data.temperatures.bed.actual + 'C' + ' ' + data.temperatures.tool0.actual + 'C',
           filament + ' z' + parseFloat(data.currentZ)
         ];
@@ -72,6 +72,15 @@ function center(str,len) {
   str = str.substr(0,len);
   var _str = new Array( Math.floor( ( len - str.length ) / 2 ) + 1 ).join(' ') + str;
   return _str + new Array( len - _str.length + 1 ).join(' ');
+}
+
+function getTime( totalSec, delim ) {
+  delim = delim || ':';
+  var hours = parseInt( totalSec / 3600 ) % 24,
+      minutes = parseInt( totalSec / 60 ) % 60,
+      seconds = parseInt(totalSec % 60, 10);
+
+  return (hours < 10 ? '0' + hours : hours) + delim + (minutes < 10 ? '0' + minutes : minutes) + delim + (seconds  < 10 ? '0' + seconds : seconds);
 }
 
 function finish() {
