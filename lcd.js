@@ -34,7 +34,7 @@ function main() {
         var filament = data.job.filament && data.job.filament.tool0.length ? data.job.filament.tool0.length : '---';
         lines = [
           data.job.file.name.replace(/\.gcode/,''),
-          ( Math.round( data.progress.completion * 1000 ) / 10 ) + '%  ' + data.progress.printTimeLeft,
+          ( Math.round( data.progress.completion * 10 ) / 10 ) + '%  ' + data.progress.printTimeLeft,
           data.temperatures.bed.actual + 'C' + ' ' + data.temperatures.tool0.actual + 'C',
           filament + ' z' + parseFloat(data.currentZ)
         ];
