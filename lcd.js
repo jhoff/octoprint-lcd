@@ -31,7 +31,7 @@ function main() {
       var lines;
 
       if( data.state.flags.printing ) {
-        var filament = data.job.filament.tool0.length ? data.job.filament.tool0.length : '---';
+        var filament = data.job.filament && data.job.filament.tool0.length ? data.job.filament.tool0.length : '---';
         lines = [
           data.job.file.name.replace(/\.gcode/,''),
           ( Math.round( data.progress.completion * 1000 ) / 10 ) + '%  ' + data.progress.printTimeLeft,
