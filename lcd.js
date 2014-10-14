@@ -41,9 +41,9 @@ function main() {
       } else {
         lines = [
           'Printrbot Simple',
-          'Idle',
-          data.temperatures.bed.actual + 'C' + ' ' + data.temperatures.tool0.actual + 'C',
-          ip_address + '  z' + parseFloat(data.currentZ)
+          ip_address,
+          'z' + parseFloat(data.currentZ),
+          data.temperatures.bed.actual + 'C    ' + data.temperatures.tool0.actual + 'C'
         ];
       }
 
