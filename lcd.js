@@ -2,13 +2,17 @@
 /*global  console */
 
 var API_KEY = 'EA46CD0BE91443688281453930FB027D',
-    HOST = 'localhost',
+    HOST = '192.168.0.103',
     PORT = '5000';
 
 var serlcd = require('serlcd'),
     request = require('request'),
     lcd = new serlcd('/dev/ttyAMA0'),
-    main, rpad, center, finish;
+    main, rpad, center, finish, ip_address;
+
+require('dns').lookup(require('os').hostname(), function (err, add, fam) {
+  ip_address = add
+})
 
 function main() {
   // request the current printer status
@@ -22,19 +26,19 @@ function main() {
       var lines;
 
       if( data.state.flags.printing ) {
-        var filament = data.job.filament ? data.job.filament.split(' / ')[0] : '---';
+        var filament = data.job.filament.tool0.length ? data.job.filament.tool0.length : '---';
         lines = [
-          data.job.filename.replace(/\.gcode/,''),
-          ( Math.round( data.progress.progress * 1000 ) / 10 ) + '%  ' + data.progress.printTimeLeft,
-          data.progress.printTime + ' ' + data.temperatures.extruder.current + 'C',
+          data.job.file.name.replace(/\.gcode/,''),
+          ( Math.round( data.progress.completion * 1000 ) / 10 ) + '%  ' + data.progress.printTimeLeft,
+          data.temperatures.bed.actual + 'C' + ' ' + data.temperatures.tool0.actual + 'C',
           filament + ' z' + parseFloat(data.currentZ)
         ];
       } else {
         lines = [
           'Printrbot Simple',
           'Idle',
-          '',
-          data.temperatures.extruder.current + 'C   z' + parseFloat(data.currentZ)
+          data.temperatures.bed.actual + 'C' + ' ' + data.temperatures.tool0.actual + 'C',
+          ip_address + '  z' + parseFloat(data.currentZ)
         ];
       }
 
