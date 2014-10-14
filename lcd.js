@@ -10,9 +10,14 @@ var serlcd = require('serlcd'),
     lcd = new serlcd('/dev/ttyAMA0'),
     main, rpad, center, finish, ip_address;
 
-require('dns').lookup(require('os').hostname(), function (err, add, fam) {
-  ip_address = add
-})
+var ifaces = require('os').networkInterfaces();
+for (var dev in ifaces) {
+  ifaces[dev].forEach(function(details){
+    if( details.family=='IPv4' && details.internal === false) {
+      ip_address = details.address;
+    }
+  });
+}
 
 function main() {
   // request the current printer status
