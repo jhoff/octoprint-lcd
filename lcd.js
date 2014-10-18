@@ -36,7 +36,7 @@ function main() {
           data.job.file.name.replace(/\.gcode/,''),
           ( Math.round( data.progress.completion * 10 ) / 10 ) + '%  ' + getTime(data.progress.printTimeLeft),
           data.temperatures.bed.actual + 'C' + ' ' + data.temperatures.tool0.actual + 'C',
-          filament + ' z' + parseFloat(data.currentZ)
+          Math.round( filament * ( 1 - ( data.progress.completion / 100 ) ) ) + 'mm   z' + parseFloat(data.currentZ)
         ];
       } else {
         lines = [
