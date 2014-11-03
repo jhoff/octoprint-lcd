@@ -40,7 +40,7 @@ function main() {
         ];
       } else {
         lines = [
-          'Printrbot Simple',
+          'Zeppelin',
           ip_address,
           'z' + parseFloat(data.currentZ),
           data.temperatures.bed.actual + 'C    ' + data.temperatures.tool0.actual + 'C'
